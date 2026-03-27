@@ -360,8 +360,7 @@
   <div class="totals-grid full">
     <div class="total-card full">
       <div class="total-label">Net Premium (Week)</div>
-      <div class="input-row"><span class="dollar" style="color:var(--blue);font-size:20px;">$</span>
-      <div class="total-value weekly" id="t-netPremiumWeekly">0</div></div>
+      <div class="total-value weekly" id="t-netPremiumWeekly">0</div>
     </div>
   </div>
   <div class="totals-grid">
@@ -379,8 +378,7 @@
     </div>
     <div class="total-card">
       <div class="total-label">Annuities</div>
-      <div class="input-row"><span class="dollar" style="color:var(--blue);font-size:20px;">$</span>
-      <div class="total-value weekly" id="t-annuities">0</div></div>
+      <div class="total-value weekly" id="t-annuities">0</div>
     </div>
   </div>
   <div class="reset-row">
@@ -392,8 +390,7 @@
   <div class="totals-grid">
     <div class="total-card full">
       <div class="total-label">Net Premium MTD</div>
-      <div class="input-row"><span class="dollar" style="font-size:20px;">$</span>
-      <div class="total-value monthly" id="t-netPremium">0</div></div>
+      <div class="total-value monthly" id="t-netPremium">0</div>
     </div>
     <div class="total-card full">
       <div class="total-label">E-Members MTD</div>
@@ -418,6 +415,10 @@
     <div class="total-card full editable">
       <div class="total-label">E-Members YTD <span class="editable-tag">editable</span></div>
       <input class="total-input" type="number" id="t-eMembersYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
+    </div>
+    <div class="total-card full editable">
+      <div class="total-label">Applications YTD <span class="editable-tag">editable</span></div>
+      <input class="total-input" type="number" id="t-applicationsYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
     </div>
   </div>
   <div class="reset-row">
@@ -444,7 +445,7 @@
 
   let weeklyData  = load('kpi_weekly',  emptyDays());
   let monthlyData = load('kpi_monthly', emptyDays());
-  let ytdData     = load('kpi_ytd', { netPremiumYTD: 0, eMembersYTD: 0 });
+  let ytdData     = load('kpi_ytd', { netPremiumYTD: 0, eMembersYTD: 0, applicationsYTD: 0 });
 
   function init() {
     const dow = new Date().getDay();
@@ -479,10 +480,12 @@
     MONTHLY_FIELDS.forEach(f => { md[f] = parseFloat(document.getElementById(f).value) || 0; });
 
     // Delta for YTD auto-accumulation
-    const prevNP   = (monthlyData[currentDay] || {}).netPremium || 0;
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers   || 0;
-    ytdData.netPremiumYTD = Math.max(0, (ytdData.netPremiumYTD || 0) + (md.netPremium - prevNP));
-    ytdData.eMembersYTD   = Math.max(0, (ytdData.eMembersYTD   || 0) + (md.eMembers   - prevEMem));
+    const prevNP   = (monthlyData[currentDay] || {}).netPremium  || 0;
+    const prevEMem = (monthlyData[currentDay] || {}).eMembers    || 0;
+    const prevApps = (weeklyData[currentDay]  || {}).applications || 0;
+    ytdData.netPremiumYTD   = Math.max(0, (ytdData.netPremiumYTD   || 0) + (md.netPremium   - prevNP));
+    ytdData.eMembersYTD     = Math.max(0, (ytdData.eMembersYTD     || 0) + (md.eMembers     - prevEMem));
+    ytdData.applicationsYTD = Math.max(0, (ytdData.applicationsYTD || 0) + (wd.applications - prevApps));
 
     weeklyData[currentDay]  = wd;
     monthlyData[currentDay] = md;
@@ -497,10 +500,12 @@
   }
 
   function clearDay() {
-    const prevNP   = (monthlyData[currentDay] || {}).netPremium || 0;
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers   || 0;
-    ytdData.netPremiumYTD = Math.max(0, (ytdData.netPremiumYTD || 0) - prevNP);
-    ytdData.eMembersYTD   = Math.max(0, (ytdData.eMembersYTD   || 0) - prevEMem);
+    const prevNP   = (monthlyData[currentDay] || {}).netPremium  || 0;
+    const prevEMem = (monthlyData[currentDay] || {}).eMembers    || 0;
+    const prevApps = (weeklyData[currentDay]  || {}).applications || 0;
+    ytdData.netPremiumYTD   = Math.max(0, (ytdData.netPremiumYTD   || 0) - prevNP);
+    ytdData.eMembersYTD     = Math.max(0, (ytdData.eMembersYTD     || 0) - prevEMem);
+    ytdData.applicationsYTD = Math.max(0, (ytdData.applicationsYTD || 0) - prevApps);
 
     weeklyData[currentDay]  = {};
     monthlyData[currentDay] = {};
@@ -517,8 +522,10 @@
   function saveYTDOverride() {
     const npVal  = parseFloat(document.getElementById('t-netPremiumYTD').value);
     const emVal  = parseFloat(document.getElementById('t-eMembersYTD').value);
-    if (!isNaN(npVal)) ytdData.netPremiumYTD = npVal;
-    if (!isNaN(emVal)) ytdData.eMembersYTD   = emVal;
+    const apVal  = parseFloat(document.getElementById('t-applicationsYTD').value);
+    if (!isNaN(npVal)) ytdData.netPremiumYTD   = npVal;
+    if (!isNaN(emVal)) ytdData.eMembersYTD     = emVal;
+    if (!isNaN(apVal)) ytdData.applicationsYTD = apVal;
     save('kpi_ytd', ytdData);
   }
 
@@ -542,8 +549,9 @@
 
   function resetYearly() {
     if (!confirm('Reset YTD totals to zero?\n(Net Premium YTD and E-Members YTD)\n\nWeekly and MTD will NOT be affected.')) return;
-    ytdData.netPremiumYTD = 0;
-    ytdData.eMembersYTD   = 0;
+    ytdData.netPremiumYTD   = 0;
+    ytdData.eMembersYTD     = 0;
+    ytdData.applicationsYTD = 0;
     save('kpi_ytd', ytdData);
     updateTotals();
   }
@@ -566,8 +574,10 @@
     // YTD — only set value if user isn't currently editing
     const npYTD = document.getElementById('t-netPremiumYTD');
     const emYTD = document.getElementById('t-eMembersYTD');
-    if (document.activeElement !== npYTD) npYTD.value = ytdData.netPremiumYTD || 0;
-    if (document.activeElement !== emYTD) emYTD.value = ytdData.eMembersYTD   || 0;
+    const apYTD = document.getElementById('t-applicationsYTD');
+    if (document.activeElement !== npYTD) npYTD.value = ytdData.netPremiumYTD   || 0;
+    if (document.activeElement !== emYTD) emYTD.value = ytdData.eMembersYTD     || 0;
+    if (document.activeElement !== apYTD) apYTD.value = ytdData.applicationsYTD || 0;
 
     document.getElementById('summaryBlock').textContent =
 `Net Premium (Week):  $${wT.netPremiumWeekly.toLocaleString()}
@@ -578,7 +588,8 @@ Annuities:           $${wT.annuities.toLocaleString()}
 Net Premium MTD:     $${mT.netPremium.toLocaleString()}
 E-Members MTD:        ${mT.eMembers}
 Net Premium YTD:     $${(ytdData.netPremiumYTD||0).toLocaleString()}
-E-Members YTD:        ${ytdData.eMembersYTD||0}`;
+E-Members YTD:        ${ytdData.eMembersYTD||0}
+Applications YTD:     ${ytdData.applicationsYTD||0}`;
   }
 
   function flashSaved() {
