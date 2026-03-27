@@ -406,6 +406,7 @@
 
   <!-- YEARLY TOTALS -->
   <div class="section-header totals-yearly" style="margin-top:20px;">Year Totals (YTD)</div>
+
   <div class="totals-grid">
     <div class="total-card full editable">
       <div class="total-label">Net Premium YTD <span class="editable-tag">editable</span></div>
@@ -422,6 +423,10 @@
   <div class="reset-row">
     <button class="reset-btn" onclick="resetYearly()">↺ Reset Year</button>
   </div>
+
+  <!-- FRIDAY SUMMARY -->
+  <div class="section-header totals-monthly" style="margin-top:20px;">Friday Summary</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:15px;font-weight:500;line-height:2.2;color:var(--subtext);white-space:pre-wrap;" id="summaryBlock">Save your numbers above to see your Friday summary.</div>
 
 </div>
 
@@ -563,6 +568,17 @@
     const emYTD = document.getElementById('t-eMembersYTD');
     if (document.activeElement !== npYTD) npYTD.value = ytdData.netPremiumYTD || 0;
     if (document.activeElement !== emYTD) emYTD.value = ytdData.eMembersYTD   || 0;
+
+    document.getElementById('summaryBlock').textContent =
+`Net Premium (Week):  $${wT.netPremiumWeekly.toLocaleString()}
+Applications:         ${wT.applications}
+Calls Made:           ${wT.callsMade}
+Appointments:         ${wT.appointments}
+Annuities:           $${wT.annuities.toLocaleString()}
+Net Premium MTD:     $${mT.netPremium.toLocaleString()}
+E-Members MTD:        ${mT.eMembers}
+Net Premium YTD:     $${(ytdData.netPremiumYTD||0).toLocaleString()}
+E-Members YTD:        ${ytdData.eMembersYTD||0}`;
   }
 
   function flashSaved() {
