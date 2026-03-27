@@ -1,440 +1,432 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KPI Tracker — Dave H</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --orange: #FF6B1A;
-    --orange-dim: #cc4f0a;
-    --bg: #0d0d0d;
-    --surface: #1a1a1a;
-    --surface2: #222222;
-    --border: #2e2e2e;
-    --text: #e0e0e0;
-    --muted: #666;
-    --green: #39ff84;
-    --blue: #4fc3f7;
-    --yellow: #ffd700;
+    --bg: #1c1c1e;
+    --surface: #2c2c2e;
+    --surface2: #3a3a3c;
+    --border: #48484a;
+    --text: #ffffff;
+    --subtext: #ebebf5cc;
+    --muted: #8e8e93;
+    --orange: #ff9f0a;
+    --blue: #0a84ff;
+    --green: #30d158;
+    --yellow: #ffd60a;
+    --red: #ff453a;
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘Rajdhani’, sans-serif;
-font-size: 16px;
-min-height: 100vh;
-background-image:
-repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,107,26,0.03) 40px, rgba(255,107,26,0.03) 41px),
-repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,107,26,0.03) 40px, rgba(255,107,26,0.03) 41px);
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    min-height: 100vh;
+  }
 
-header {
-text-align: center;
-padding: 28px 20px 18px;
-border-bottom: 1px solid var(–border);
-}
+  header {
+    background: var(--surface);
+    text-align: center;
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+  }
 
-.logo {
-width: 46px; height: 46px;
-background: var(–orange);
-border-radius: 50%;
-display: flex; align-items: center; justify-content: center;
-font-size: 20px;
-margin: 0 auto 10px;
-box-shadow: 0 0 20px rgba(255,107,26,0.5);
-}
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
 
-h1 {
-font-family: ‘Orbitron’, monospace;
-font-size: 16px;
-font-weight: 900;
-letter-spacing: 0.15em;
-color: #fff;
-text-transform: uppercase;
-}
+  .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
 
-.container {
-max-width: 520px;
-margin: 0 auto;
-padding: 20px 14px 80px;
-}
+  .container {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 16px 14px 60px;
+  }
 
-.day-bar {
-display: flex;
-gap: 6px;
-margin-bottom: 22px;
-overflow-x: auto;
-padding-bottom: 2px;
-}
+  /* Day bar */
+  .day-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
 
-.day-btn {
-flex: 1;
-min-width: 52px;
-padding: 8px 4px;
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–muted);
-font-family: ‘Orbitron’, monospace;
-font-size: 10px;
-font-weight: 700;
-letter-spacing: 0.05em;
-cursor: pointer;
-transition: all 0.2s;
-text-align: center;
-}
+  .day-btn {
+    flex: 1;
+    padding: 10px 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
 
-.day-btn:hover { border-color: var(–orange); color: var(–orange); }
-.day-btn.active { background: var(–orange); border-color: var(–orange); color: #000; box-shadow: 0 0 12px rgba(255,107,26,0.4); }
-.day-btn.has-data::after { content: ‘●’; display: block; font-size: 6px; margin-top: 3px; color: var(–green); }
-.day-btn.active.has-data::after { color: #000; }
+  .day-btn:hover { background: var(--surface2); color: var(--text); }
+  .day-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
+  .day-btn.has-data .dot { display: block; }
+  .dot { display: none; width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin: 3px auto 0; }
+  .day-btn.active .dot { background: rgba(255,255,255,0.7); }
 
-.section-label {
-display: flex;
-align-items: center;
-gap: 10px;
-margin: 20px 0 10px;
-font-family: ‘Orbitron’, monospace;
-font-size: 10px;
-font-weight: 700;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-}
+  /* Section headers */
+  .section-header {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 4px;
+    margin: 18px 0 8px;
+    border-bottom: 1px solid var(--border);
+  }
 
-.section-label::after { content: ‘’; flex: 1; height: 1px; }
-.section-label.weekly { color: var(–blue); }
-.section-label.weekly::after { background: linear-gradient(to right, var(–blue), transparent); }
-.section-label.monthly { color: var(–orange); }
-.section-label.monthly::after { background: linear-gradient(to right, var(–orange-dim), transparent); }
-.section-label.friday { color: var(–yellow); }
-.section-label.friday::after { background: linear-gradient(to right, #aa8800, transparent); }
+  .section-header.weekly { color: var(--blue); }
+  .section-header.monthly { color: var(--orange); }
+  .section-header.friday { color: var(--yellow); }
+  .section-header.totals-weekly { color: var(--blue); }
+  .section-header.totals-monthly { color: var(--orange); }
+  .section-header.totals-yearly { color: var(--yellow); }
 
-.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.field-grid.full { grid-template-columns: 1fr; }
+  /* Input grid */
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  .field-grid.full { grid-template-columns: 1fr; }
 
-.field-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 12px 14px;
-transition: border-color 0.2s;
-}
+  .field-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
 
-.field-card:focus-within { border-color: var(–orange); }
-.field-card.weekly-card:focus-within { border-color: var(–blue); }
-.field-card.friday-card:focus-within { border-color: var(–yellow); }
+  .field-card:focus-within { border-color: var(--blue); }
+  .field-card.monthly-card:focus-within { border-color: var(--orange); }
 
-.field-label {
-font-size: 11px;
-font-weight: 600;
-letter-spacing: 0.08em;
-color: var(–muted);
-text-transform: uppercase;
-margin-bottom: 6px;
-}
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
 
-.field-input {
-background: transparent;
-border: none;
-outline: none;
-color: #fff;
-font-family: ‘Orbitron’, monospace;
-font-size: 20px;
-font-weight: 700;
--moz-appearance: textfield;
-width: 100%;
-}
+  .input-row { display: flex; align-items: baseline; gap: 2px; }
 
-.field-input.with-dollar { width: calc(100% - 20px); }
-.field-input::-webkit-outer-spin-button,
-.field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.field-input::placeholder { color: #333; }
+  .dollar {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+  }
 
-.dollar-sign { font-family: ‘Orbitron’, monospace; font-size: 20px; font-weight: 700; color: var(–orange); }
+  .field-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    width: 100%;
+    -moz-appearance: textfield;
+    line-height: 1;
+  }
 
-.btn-row { display: flex; gap: 10px; margin-top: 14px; }
+  .field-input::-webkit-outer-spin-button,
+  .field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .field-input::placeholder { color: var(--surface2); }
 
-.btn {
-flex: 1;
-padding: 11px;
-border-radius: 8px;
-border: none;
-font-family: ‘Orbitron’, monospace;
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.08em;
-cursor: pointer;
-transition: all 0.2s;
-text-transform: uppercase;
-}
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; margin-top: 14px; }
 
-.btn-save { background: var(–orange); color: #000; }
-.btn-save:hover { background: #ff8c45; box-shadow: 0 0 15px rgba(255,107,26,0.5); }
-.btn-clear { background: transparent; border: 1px solid var(–border); color: var(–muted); }
-.btn-clear:hover { border-color: #ff4444; color: #ff4444; }
+  .btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
 
-.saved-flash {
-text-align: center;
-font-family: ‘Orbitron’, monospace;
-font-size: 11px;
-color: var(–green);
-letter-spacing: 0.15em;
-margin-top: 8px;
-height: 16px;
-opacity: 0;
-transition: opacity 0.3s;
-}
-.saved-flash.show { opacity: 1; }
+  .btn:hover { opacity: 0.85; }
+  .btn-save { background: var(--blue); color: #fff; }
+  .btn-clear { background: var(--surface2); color: var(--text); }
 
-.totals-panel { border-radius: 12px; padding: 16px; margin-top: 10px; }
-.totals-panel.weekly-panel { background: rgba(79,195,247,0.05); border: 1px solid rgba(79,195,247,0.25); }
-.totals-panel.monthly-panel { background: rgba(255,107,26,0.05); border: 1px solid rgba(255,107,26,0.3); box-shadow: 0 0 16px rgba(255,107,26,0.08); }
-.totals-panel.yearly-panel { background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.2); }
+  .saved-flash {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    margin-top: 8px;
+    height: 18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .saved-flash.show { opacity: 1; }
 
-.totals-title {
-font-family: ‘Orbitron’, monospace;
-font-size: 11px;
-font-weight: 900;
-letter-spacing: 0.2em;
-margin-bottom: 12px;
-text-align: center;
-}
+  /* Totals */
+  .totals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  .totals-grid.full { grid-template-columns: 1fr; }
 
-.weekly-panel .totals-title { color: var(–blue); }
-.monthly-panel .totals-title { color: var(–orange); }
-.yearly-panel .totals-title { color: var(–yellow); }
+  .total-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
 
-.totals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .total-card.full { grid-column: span 2; }
+  .total-card.editable { border-style: dashed; }
+  .total-card.editable:focus-within { border-color: var(--yellow); border-style: solid; }
 
-.total-item { background: var(–surface2); border-radius: 8px; padding: 10px 12px; }
-.total-item.full { grid-column: span 2; }
+  .total-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-.total-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(–muted); text-transform: uppercase; margin-bottom: 4px; }
+  .editable-tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--yellow);
+    background: rgba(255,214,10,0.12);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
 
-.total-value { font-family: ‘Orbitron’, monospace; font-size: 18px; font-weight: 700; }
-.weekly-panel .total-value { color: var(–blue); }
-.monthly-panel .total-value { color: var(–green); }
-.yearly-panel .total-value { color: var(–yellow); }
-.total-value.dollar::before { content: ‘$’; font-size: 13px; opacity: 0.7; }
+  .total-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
 
-.reset-btn {
-width: 100%;
-margin-top: 10px;
-padding: 9px;
-border-radius: 8px;
-background: transparent;
-font-family: ‘Orbitron’, monospace;
-font-size: 10px;
-letter-spacing: 0.1em;
-cursor: pointer;
-transition: all 0.2s;
-text-transform: uppercase;
-}
+  .total-value.weekly { color: var(--blue); }
+  .total-value.monthly { color: var(--orange); }
+  .total-value.yearly { color: var(--yellow); }
 
-.reset-weekly { border: 1px solid rgba(79,195,247,0.2); color: rgba(79,195,247,0.4); }
-.reset-weekly:hover { border-color: var(–blue); color: var(–blue); }
-.reset-monthly { border: 1px solid rgba(255,107,26,0.2); color: rgba(255,107,26,0.4); }
-.reset-monthly:hover { border-color: var(–orange); color: var(–orange); }
-.reset-yearly { border: 1px solid rgba(255,215,0,0.2); color: rgba(255,215,0,0.4); }
-.reset-yearly:hover { border-color: var(–yellow); color: var(–yellow); }
+  .total-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--yellow);
+    width: 100%;
+    -moz-appearance: textfield;
+    line-height: 1;
+  }
 
-.copy-block {
-background: #111;
-border: 1px solid #2a2a2a;
-border-radius: 8px;
-padding: 14px;
-font-size: 13px;
-font-weight: 500;
-line-height: 1.9;
-color: #aaa;
-white-space: pre-wrap;
-margin-top: 10px;
-}
+  .total-input::-webkit-outer-spin-button,
+  .total-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-.copy-btn {
-width: 100%;
-margin-top: 8px;
-padding: 11px;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–text);
-font-family: ‘Orbitron’, monospace;
-font-size: 11px;
-letter-spacing: 0.1em;
-cursor: pointer;
-transition: all 0.2s;
-}
+  /* Reset buttons */
+  .reset-row { display: flex; gap: 8px; margin-top: 10px; }
 
-.copy-btn:hover { border-color: var(–orange); color: var(–orange); }
+  .reset-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
 
-.divider { height: 1px; background: var(–border); margin: 28px 0; }
+  .reset-btn:hover { color: var(--red); border-color: var(--red); }
 
-@media (max-width: 400px) {
-.field-grid { grid-template-columns: 1fr; }
-.totals-grid { grid-template-columns: 1fr; }
-.total-item.full { grid-column: span 1; }
-}
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  @media (max-width: 380px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .totals-grid { grid-template-columns: 1fr; }
+    .total-card.full { grid-column: span 1; }
+  }
 </style>
-
 </head>
 <body>
 
 <header>
-  <div class="logo">⚡</div>
-  <h1>KPI Tracker — Dave H</h1>
+  <h1>KPI TRACKER</h1>
+  <div class="subtitle">Dave H</div>
 </header>
 
 <div class="container">
 
-  <div style="margin: 18px 0 6px;"><div class="section-label weekly">📅 Select Day</div></div>
-  <div class="day-bar" id="dayBar">
-    <button class="day-btn" data-day="0">MON</button>
-    <button class="day-btn" data-day="1">TUE</button>
-    <button class="day-btn" data-day="2">WED</button>
-    <button class="day-btn" data-day="3">THU</button>
-    <button class="day-btn" data-day="4">FRI</button>
+  <!-- Day selector -->
+  <div class="section-header weekly" style="margin-top:8px;">Select Day</div>
+  <div class="day-bar">
+    <button class="day-btn" data-day="0">MON<span class="dot"></span></button>
+    <button class="day-btn" data-day="1">TUE<span class="dot"></span></button>
+    <button class="day-btn" data-day="2">WED<span class="dot"></span></button>
+    <button class="day-btn" data-day="3">THU<span class="dot"></span></button>
+    <button class="day-btn" data-day="4">FRI<span class="dot"></span></button>
   </div>
 
   <!-- WEEKLY FIELDS -->
-
-  <div class="section-label weekly">📊 Weekly Fields</div>
+  <div class="section-header weekly">Weekly Fields</div>
   <div class="field-grid full">
-    <div class="field-card weekly-card">
-      <div class="field-label">⚡ Net Premium (Weekly)</div>
-      <span class="dollar-sign">$</span><input class="field-input with-dollar" type="number" id="netPremiumWeekly" placeholder="0" min="0">
+    <div class="field-card">
+      <div class="field-label">Net Premium</div>
+      <div class="input-row">
+        <span class="dollar">$</span>
+        <input class="field-input" type="number" id="netPremiumWeekly" placeholder="0" min="0">
+      </div>
     </div>
   </div>
   <div class="field-grid">
-    <div class="field-card weekly-card">
-      <div class="field-label">📋 Applications</div>
+    <div class="field-card">
+      <div class="field-label">Applications</div>
       <input class="field-input" type="number" id="applications" placeholder="0" min="0">
     </div>
-    <div class="field-card weekly-card">
-      <div class="field-label">📞 Calls Made</div>
+    <div class="field-card">
+      <div class="field-label">Calls Made</div>
       <input class="field-input" type="number" id="callsMade" placeholder="0" min="0">
     </div>
-    <div class="field-card weekly-card">
-      <div class="field-label">📅 Appointments</div>
+    <div class="field-card">
+      <div class="field-label">Appointments</div>
       <input class="field-input" type="number" id="appointments" placeholder="0" min="0">
     </div>
-    <div class="field-card weekly-card">
-      <div class="field-label">🏦 Annuities</div>
-      <span class="dollar-sign">$</span><input class="field-input with-dollar" type="number" id="annuities" placeholder="0" min="0">
+    <div class="field-card">
+      <div class="field-label">Annuities</div>
+      <div class="input-row">
+        <span class="dollar">$</span>
+        <input class="field-input" type="number" id="annuities" placeholder="0" min="0">
+      </div>
     </div>
   </div>
 
   <!-- MTD FIELDS -->
-
-  <div class="section-label monthly">📈 Month-to-Date Fields</div>
+  <div class="section-header monthly">Month-to-Date Fields</div>
   <div class="field-grid">
-    <div class="field-card">
-      <div class="field-label">⚡ Net Premium (MTD)</div>
-      <span class="dollar-sign">$</span><input class="field-input with-dollar" type="number" id="netPremium" placeholder="0" min="0">
+    <div class="field-card monthly-card">
+      <div class="field-label">Net Premium MTD</div>
+      <div class="input-row">
+        <span class="dollar">$</span>
+        <input class="field-input" type="number" id="netPremium" placeholder="0" min="0">
+      </div>
     </div>
-    <div class="field-card">
-      <div class="field-label">👥 E-Members</div>
+    <div class="field-card monthly-card">
+      <div class="field-label">E-Members MTD</div>
       <input class="field-input" type="number" id="eMembers" placeholder="0" min="0">
     </div>
   </div>
 
-  <!-- FRIDAY FIELD -->
-
-  <div class="section-label friday">📌 Friday Only</div>
-  <div class="field-grid full">
-    <div class="field-card friday-card">
-      <div class="field-label">🗓 Appts Next Week</div>
-      <input class="field-input" type="number" id="apptsNextWeek" placeholder="0" min="0">
-    </div>
-  </div>
-
+  <!-- Save / Clear -->
   <div class="btn-row">
     <button class="btn btn-save" onclick="saveDay()">Save Day</button>
     <button class="btn btn-clear" onclick="clearDay()">Clear</button>
   </div>
-  <div class="saved-flash" id="savedFlash">✓ SAVED</div>
+  <div class="saved-flash" id="savedFlash">✓ Saved</div>
 
   <div class="divider"></div>
 
   <!-- WEEKLY TOTALS -->
-
-  <div class="totals-panel weekly-panel">
-    <div class="totals-title">⚡ WEEK TOTALS</div>
-    <div class="totals-grid">
-      <div class="total-item full">
-        <div class="total-label">Net Premium (Weekly)</div>
-        <div class="total-value dollar" id="t-netPremiumWeekly">0</div>
-      </div>
-      <div class="total-item">
-        <div class="total-label">Applications</div>
-        <div class="total-value" id="t-applications">0</div>
-      </div>
-      <div class="total-item">
-        <div class="total-label">Calls Made</div>
-        <div class="total-value" id="t-callsMade">0</div>
-      </div>
-      <div class="total-item">
-        <div class="total-label">Appointments</div>
-        <div class="total-value" id="t-appointments">0</div>
-      </div>
-      <div class="total-item">
-        <div class="total-label">Annuities</div>
-        <div class="total-value dollar" id="t-annuities">0</div>
-      </div>
-      <div class="total-item full">
-        <div class="total-label">🗓 Appts Next Week</div>
-        <div class="total-value" id="t-apptsNextWeek">0</div>
-      </div>
+  <div class="section-header totals-weekly">Week Totals</div>
+  <div class="totals-grid full">
+    <div class="total-card full">
+      <div class="total-label">Net Premium (Week)</div>
+      <div class="input-row"><span class="dollar" style="color:var(--blue);font-size:20px;">$</span>
+      <div class="total-value weekly" id="t-netPremiumWeekly">0</div></div>
     </div>
-    <button class="reset-btn reset-weekly" onclick="resetWeekly()">↺ Reset Week</button>
+  </div>
+  <div class="totals-grid">
+    <div class="total-card">
+      <div class="total-label">Applications</div>
+      <div class="total-value weekly" id="t-applications">0</div>
+    </div>
+    <div class="total-card">
+      <div class="total-label">Calls Made</div>
+      <div class="total-value weekly" id="t-callsMade">0</div>
+    </div>
+    <div class="total-card">
+      <div class="total-label">Appointments</div>
+      <div class="total-value weekly" id="t-appointments">0</div>
+    </div>
+    <div class="total-card">
+      <div class="total-label">Annuities</div>
+      <div class="input-row"><span class="dollar" style="color:var(--blue);font-size:20px;">$</span>
+      <div class="total-value weekly" id="t-annuities">0</div></div>
+    </div>
+  </div>
+  <div class="reset-row">
+    <button class="reset-btn" onclick="resetWeekly()">↺ Reset Week</button>
   </div>
 
   <!-- MONTHLY TOTALS -->
-
-  <div class="totals-panel monthly-panel" style="margin-top:14px;">
-    <div class="totals-title">🗓 MONTH TOTALS (MTD)</div>
-    <div class="totals-grid">
-      <div class="total-item full">
-        <div class="total-label">Net Premium MTD</div>
-        <div class="total-value dollar" id="t-netPremium">0</div>
-      </div>
-      <div class="total-item full">
-        <div class="total-label">E-Members MTD</div>
-        <div class="total-value" id="t-eMembers">0</div>
-      </div>
+  <div class="section-header totals-monthly" style="margin-top:20px;">Month Totals (MTD)</div>
+  <div class="totals-grid">
+    <div class="total-card full">
+      <div class="total-label">Net Premium MTD</div>
+      <div class="input-row"><span class="dollar" style="font-size:20px;">$</span>
+      <div class="total-value monthly" id="t-netPremium">0</div></div>
     </div>
-    <button class="reset-btn reset-monthly" onclick="resetMonthly()">↺ Reset Month</button>
+    <div class="total-card full">
+      <div class="total-label">E-Members MTD</div>
+      <div class="total-value monthly" id="t-eMembers">0</div>
+    </div>
+  </div>
+  <div class="reset-row">
+    <button class="reset-btn" onclick="resetMonthly()">↺ Reset Month</button>
   </div>
 
   <!-- YEARLY TOTALS -->
-
-  <div class="totals-panel yearly-panel" style="margin-top:14px;">
-    <div class="totals-title">⭐ YEAR TOTALS (YTD)</div>
-    <div class="totals-grid">
-      <div class="total-item full">
-        <div class="total-label">E-Members YTD</div>
-        <div class="total-value" id="t-eMembersYTD">0</div>
+  <div class="section-header totals-yearly" style="margin-top:20px;">Year Totals (YTD)</div>
+  <div class="totals-grid">
+    <div class="total-card full editable">
+      <div class="total-label">Net Premium YTD <span class="editable-tag">editable</span></div>
+      <div class="input-row">
+        <span class="dollar" style="color:var(--yellow);font-size:20px;">$</span>
+        <input class="total-input" type="number" id="t-netPremiumYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
       </div>
     </div>
-    <button class="reset-btn reset-yearly" onclick="resetYearly()">↺ Reset Year</button>
+    <div class="total-card full editable">
+      <div class="total-label">E-Members YTD <span class="editable-tag">editable</span></div>
+      <input class="total-input" type="number" id="t-eMembersYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
+    </div>
   </div>
-
-  <!-- FRIDAY COPY BLOCK -->
-
-  <div class="section-label monthly" style="margin-top:28px;">📋 Friday Summary</div>
-  <div class="copy-block" id="copyBlock">Save your numbers above to generate your Friday summary.</div>
-  <button class="copy-btn" onclick="copyTotals()">📋 COPY ALL TOTALS FOR FORM</button>
+  <div class="reset-row">
+    <button class="reset-btn" onclick="resetYearly()">↺ Reset Year</button>
+  </div>
 
 </div>
 
 <script>
-  const WEEKLY_FIELDS  = ['netPremiumWeekly','applications','callsMade','appointments','annuities','apptsNextWeek'];
+  const WEEKLY_FIELDS  = ['netPremiumWeekly','applications','callsMade','appointments','annuities'];
   const MONTHLY_FIELDS = ['netPremium','eMembers'];
 
   let currentDay = 0;
@@ -447,7 +439,7 @@ transition: all 0.2s;
 
   let weeklyData  = load('kpi_weekly',  emptyDays());
   let monthlyData = load('kpi_monthly', emptyDays());
-  let ytdData     = load('kpi_ytd', { eMembersYTD: 0 });
+  let ytdData     = load('kpi_ytd', { netPremiumYTD: 0, eMembersYTD: 0 });
 
   function init() {
     const dow = new Date().getDay();
@@ -477,14 +469,15 @@ transition: all 0.2s;
 
   function saveDay() {
     const wd = {};
-    WEEKLY_FIELDS.forEach(f  => { wd[f] = parseFloat(document.getElementById(f).value) || 0; });
+    WEEKLY_FIELDS.forEach(f => { wd[f] = parseFloat(document.getElementById(f).value) || 0; });
     const md = {};
     MONTHLY_FIELDS.forEach(f => { md[f] = parseFloat(document.getElementById(f).value) || 0; });
 
-    // Delta for YTD
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers || 0;
-    const newEMem  = md.eMembers || 0;
-    ytdData.eMembersYTD = Math.max(0, (ytdData.eMembersYTD || 0) + (newEMem - prevEMem));
+    // Delta for YTD auto-accumulation
+    const prevNP   = (monthlyData[currentDay] || {}).netPremium || 0;
+    const prevEMem = (monthlyData[currentDay] || {}).eMembers   || 0;
+    ytdData.netPremiumYTD = Math.max(0, (ytdData.netPremiumYTD || 0) + (md.netPremium - prevNP));
+    ytdData.eMembersYTD   = Math.max(0, (ytdData.eMembersYTD   || 0) + (md.eMembers   - prevEMem));
 
     weeklyData[currentDay]  = wd;
     monthlyData[currentDay] = md;
@@ -499,8 +492,10 @@ transition: all 0.2s;
   }
 
   function clearDay() {
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers || 0;
-    ytdData.eMembersYTD = Math.max(0, (ytdData.eMembersYTD || 0) - prevEMem);
+    const prevNP   = (monthlyData[currentDay] || {}).netPremium || 0;
+    const prevEMem = (monthlyData[currentDay] || {}).eMembers   || 0;
+    ytdData.netPremiumYTD = Math.max(0, (ytdData.netPremiumYTD || 0) - prevNP);
+    ytdData.eMembersYTD   = Math.max(0, (ytdData.eMembersYTD   || 0) - prevEMem);
 
     weeklyData[currentDay]  = {};
     monthlyData[currentDay] = {};
@@ -514,8 +509,16 @@ transition: all 0.2s;
     updateTotals();
   }
 
+  function saveYTDOverride() {
+    const npVal  = parseFloat(document.getElementById('t-netPremiumYTD').value);
+    const emVal  = parseFloat(document.getElementById('t-eMembersYTD').value);
+    if (!isNaN(npVal)) ytdData.netPremiumYTD = npVal;
+    if (!isNaN(emVal)) ytdData.eMembersYTD   = emVal;
+    save('kpi_ytd', ytdData);
+  }
+
   function resetWeekly() {
-    if (!confirm('Reset all WEEKLY totals?\n(Net Premium Weekly, Applications, Calls Made, Appointments, Annuities, Appts Next Week)\n\nMTD and YTD totals will NOT be affected.')) return;
+    if (!confirm('Reset all weekly totals?\n(Net Premium Weekly, Applications, Calls Made, Appointments, Annuities)\n\nMTD and YTD will NOT be affected.')) return;
     weeklyData = emptyDays();
     save('kpi_weekly', weeklyData);
     loadDayIntoForm();
@@ -524,7 +527,7 @@ transition: all 0.2s;
   }
 
   function resetMonthly() {
-    if (!confirm('Reset all MTD totals?\n(Net Premium MTD and E-Members MTD)\n\nWeekly and YTD totals will NOT be affected.')) return;
+    if (!confirm('Reset MTD totals?\n(Net Premium MTD and E-Members MTD)\n\nWeekly and YTD will NOT be affected.')) return;
     monthlyData = emptyDays();
     save('kpi_monthly', monthlyData);
     loadDayIntoForm();
@@ -533,8 +536,9 @@ transition: all 0.2s;
   }
 
   function resetYearly() {
-    if (!confirm('Reset E-Members YTD to zero?\n\nAll other totals will NOT be affected.')) return;
-    ytdData.eMembersYTD = 0;
+    if (!confirm('Reset YTD totals to zero?\n(Net Premium YTD and E-Members YTD)\n\nWeekly and MTD will NOT be affected.')) return;
+    ytdData.netPremiumYTD = 0;
+    ytdData.eMembersYTD   = 0;
     save('kpi_ytd', ytdData);
     updateTotals();
   }
@@ -546,35 +550,19 @@ transition: all 0.2s;
     weeklyData.forEach(d  => { if(!d) return; WEEKLY_FIELDS.forEach(f  => wT[f] += (parseFloat(d[f]) || 0)); });
     monthlyData.forEach(d => { if(!d) return; MONTHLY_FIELDS.forEach(f => mT[f] += (parseFloat(d[f]) || 0)); });
 
-    document.getElementById('t-netPremiumWeekly').textContent = wT.netPremiumWeekly.toLocaleString();
+    document.getElementById('t-netPremiumWeekly').textContent = '$' + wT.netPremiumWeekly.toLocaleString();
     document.getElementById('t-applications').textContent     = wT.applications;
     document.getElementById('t-callsMade').textContent        = wT.callsMade;
     document.getElementById('t-appointments').textContent     = wT.appointments;
-    document.getElementById('t-annuities').textContent        = wT.annuities.toLocaleString();
-    document.getElementById('t-apptsNextWeek').textContent    = wT.apptsNextWeek;
-    document.getElementById('t-netPremium').textContent       = mT.netPremium.toLocaleString();
+    document.getElementById('t-annuities').textContent        = '$' + wT.annuities.toLocaleString();
+    document.getElementById('t-netPremium').textContent       = '$' + mT.netPremium.toLocaleString();
     document.getElementById('t-eMembers').textContent         = mT.eMembers;
-    document.getElementById('t-eMembersYTD').textContent      = ytdData.eMembersYTD || 0;
 
-    document.getElementById('copyBlock').textContent =
-`Net Premium (Weekly): $${wT.netPremiumWeekly.toLocaleString()}
-Net Premium MTD:      $${mT.netPremium.toLocaleString()}
-Applications:          ${wT.applications}
-Calls Made:            ${wT.callsMade}
-Appointments:          ${wT.appointments}
-Appts Next Week:       ${wT.apptsNextWeek}
-Annuities:            $${wT.annuities.toLocaleString()}
-E-Members MTD:         ${mT.eMembers}
-E-Members YTD:         ${ytdData.eMembersYTD || 0}`;
-  }
-
-  function copyTotals() {
-    const text = document.getElementById('copyBlock').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✓ COPIED!';
-      setTimeout(() => btn.textContent = '📋 COPY ALL TOTALS FOR FORM', 2000);
-    });
+    // YTD — only set value if user isn't currently editing
+    const npYTD = document.getElementById('t-netPremiumYTD');
+    const emYTD = document.getElementById('t-eMembersYTD');
+    if (document.activeElement !== npYTD) npYTD.value = ytdData.netPremiumYTD || 0;
+    if (document.activeElement !== emYTD) emYTD.value = ytdData.eMembersYTD   || 0;
   }
 
   function flashSaved() {
@@ -585,6 +573,5 @@ E-Members YTD:         ${ytdData.eMembersYTD || 0}`;
 
   init();
 </script>
-
 </body>
 </html>
