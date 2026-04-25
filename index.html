@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KPI Tracker — Dave H</title>
+<title>KPI Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -365,7 +365,7 @@
   </div>
  
   <div class="section-header monthly">Month-to-Date Fields</div>
-  <div class="field-grid">
+  <div class="field-grid full">
     <div class="field-card monthly-card">
       <div class="field-label">Net Premium MTD</div>
       <div class="input-row">
@@ -373,9 +373,15 @@
         <input class="field-input" type="number" id="netPremium" placeholder="0" min="0">
       </div>
     </div>
+  </div>
+  <div class="field-grid">
     <div class="field-card monthly-card">
       <div class="field-label">E-Members MTD</div>
       <input class="field-input" type="number" id="eMembers" placeholder="0" min="0">
+    </div>
+    <div class="field-card monthly-card">
+      <div class="field-label">Applications MTD</div>
+      <input class="field-input" type="number" id="applicationsMTD" placeholder="0" min="0">
     </div>
   </div>
  
@@ -418,13 +424,20 @@
   <!-- MONTHLY TOTALS -->
   <div class="section-header totals-monthly" style="margin-top:20px;">Month Totals (MTD)</div>
   <div class="totals-grid">
-    <div class="total-card full">
-      <div class="total-label">Net Premium MTD</div>
-      <div class="total-value monthly" id="t-netPremium">$0</div>
+    <div class="total-card full editable">
+      <div class="total-label">Net Premium MTD <span class="editable-tag">editable</span></div>
+      <div class="input-row">
+        <span class="dollar" style="font-size:20px;">$</span>
+        <input class="total-input" style="color:var(--orange);" type="number" id="t-netPremium" placeholder="0" min="0" onchange="saveMTDOverride()">
+      </div>
     </div>
-    <div class="total-card full">
-      <div class="total-label">E-Members MTD</div>
-      <div class="total-value monthly" id="t-eMembers">0</div>
+    <div class="total-card full editable">
+      <div class="total-label">E-Members MTD <span class="editable-tag">editable</span></div>
+      <input class="total-input" style="color:var(--orange);" type="number" id="t-eMembers" placeholder="0" min="0" onchange="saveMTDOverride()">
+    </div>
+    <div class="total-card full editable">
+      <div class="total-label">Applications MTD <span class="editable-tag">editable</span></div>
+      <input class="total-input" style="color:var(--orange);" type="number" id="t-applicationsMTD" placeholder="0" min="0" onchange="saveMTDOverride()">
     </div>
   </div>
   <div class="reset-row">
@@ -473,11 +486,13 @@
   };
  
   const WEEKLY_FIELDS  = ['netPremiumWeekly','applications','callsMade','appointments','annuities'];
-  const MONTHLY_FIELDS = ['netPremium','eMembers'];
+  const MONTHLY_FIELDS = ['netPremium','eMembers','applicationsMTD'];
   const YTD_FIELDS     = ['netPremiumYTD','eMembersYTD','applicationsYTD'];
+  const MTD_OVERRIDE_FIELDS = ['mtd_netPremium_override','mtd_eMembers_override','mtd_applicationsMTD_override'];
  
   let currentDay = 0;
   let weeklyData  = Array(5).fill(null).map(() => ({}));
+  let mtdOverrides = { netPremium: null, eMembers: null, applicationsMTD: null };
   let monthlyData = Array(5).fill(null).map(() => ({}));
   let ytdData     = { netPremiumYTD: 0, eMembersYTD: 0, applicationsYTD: 0 };
  
@@ -541,6 +556,11 @@
       YTD_FIELDS.forEach(f => {
         if (map[f] !== undefined) ytdData[f] = map[f];
       });
+ 
+      // Load MTD overrides
+      if (map['mtd_netPremium_override'] !== undefined) mtdOverrides.netPremium = map['mtd_netPremium_override'];
+      if (map['mtd_eMembers_override'] !== undefined) mtdOverrides.eMembers = map['mtd_eMembers_override'];
+      if (map['mtd_applicationsMTD_override'] !== undefined) mtdOverrides.applicationsMTD = map['mtd_applicationsMTD_override'];
  
       setSyncStatus('synced', 'Synced');
     } catch(e) {
@@ -609,6 +629,22 @@
     updateTotals();
   }
  
+  async function saveMTDOverride() {
+    const npVal = parseFloat(document.getElementById('t-netPremium').value);
+    const emVal = parseFloat(document.getElementById('t-eMembers').value);
+    const apVal = parseFloat(document.getElementById('t-applicationsMTD').value);
+    if (!isNaN(npVal)) mtdOverrides.netPremium = npVal;
+    if (!isNaN(emVal)) mtdOverrides.eMembers = emVal;
+    if (!isNaN(apVal)) mtdOverrides.applicationsMTD = apVal;
+    setSyncStatus('saving', 'Saving...');
+    await Promise.all([
+      dbSet('mtd_netPremium_override', mtdOverrides.netPremium),
+      dbSet('mtd_eMembers_override', mtdOverrides.eMembers),
+      dbSet('mtd_applicationsMTD_override', mtdOverrides.applicationsMTD)
+    ]);
+    setSyncStatus('synced', 'Saved ✓');
+  }
+ 
   async function saveYTDOverride() {
     const npVal = parseFloat(document.getElementById('t-netPremiumYTD').value);
     const emVal = parseFloat(document.getElementById('t-eMembersYTD').value);
@@ -646,6 +682,12 @@
     }
     await Promise.all(deletes);
     monthlyData = Array(5).fill(null).map(() => ({}));
+    mtdOverrides = { netPremium: null, eMembers: null, applicationsMTD: null };
+    await Promise.all([
+      dbSet('mtd_netPremium_override', null),
+      dbSet('mtd_eMembers_override', null),
+      dbSet('mtd_applicationsMTD_override', null)
+    ]);
     setSyncStatus('synced', 'Saved ✓');
     loadDayIntoForm();
     renderDayBar();
@@ -691,8 +733,12 @@
     document.getElementById('t-callsMade').textContent        = wT.callsMade;
     document.getElementById('t-appointments').textContent     = wT.appointments;
     document.getElementById('t-annuities').textContent        = '$' + wT.annuities.toLocaleString();
-    document.getElementById('t-netPremium').textContent       = '$' + mT.netPremium.toLocaleString();
-    document.getElementById('t-eMembers').textContent         = mT.eMembers;
+    const npMTD = document.getElementById('t-netPremium');
+    const emMTD = document.getElementById('t-eMembers');
+    const apMTD = document.getElementById('t-applicationsMTD');
+    if (document.activeElement !== npMTD) npMTD.value = mtdOverrides.netPremium !== null ? mtdOverrides.netPremium : mT.netPremium;
+    if (document.activeElement !== emMTD) emMTD.value = mtdOverrides.eMembers !== null ? mtdOverrides.eMembers : mT.eMembers;
+    if (document.activeElement !== apMTD) apMTD.value = mtdOverrides.applicationsMTD !== null ? mtdOverrides.applicationsMTD : mT.applicationsMTD;
  
     const npYTD = document.getElementById('t-netPremiumYTD');
     const emYTD = document.getElementById('t-eMembersYTD');
@@ -707,8 +753,9 @@ Applications:         ${wT.applications}
 Calls Made:           ${wT.callsMade}
 Appointments:         ${wT.appointments}
 Annuities:           $${wT.annuities.toLocaleString()}
-Net Premium MTD:     $${mT.netPremium.toLocaleString()}
-E-Members MTD:        ${mT.eMembers}
+Net Premium MTD:     $${(mtdOverrides.netPremium !== null ? mtdOverrides.netPremium : mT.netPremium).toLocaleString()}
+E-Members MTD:        ${mtdOverrides.eMembers !== null ? mtdOverrides.eMembers : mT.eMembers}
+Applications MTD:     ${mtdOverrides.applicationsMTD !== null ? mtdOverrides.applicationsMTD : mT.applicationsMTD}
 Net Premium YTD:     $${(ytdData.netPremiumYTD||0).toLocaleString()}
 E-Members YTD:        ${ytdData.eMembersYTD||0}
 Applications YTD:     ${ytdData.applicationsYTD||0}`;
