@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KPI Tracker</title>
+<title>KPI Tracker — Dave H</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -20,9 +20,9 @@
     --yellow: #ffd60a;
     --red: #ff453a;
   }
- 
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -30,14 +30,14 @@
     font-size: 16px;
     min-height: 100vh;
   }
- 
+
   header {
     background: var(--surface);
     text-align: center;
     padding: 20px 16px 16px;
     border-bottom: 1px solid var(--border);
   }
- 
+
   h1 {
     font-family: 'Orbitron', monospace;
     font-size: 15px;
@@ -45,13 +45,13 @@
     letter-spacing: 0.1em;
     color: var(--text);
   }
- 
+
   .subtitle {
     font-size: 13px;
     color: var(--muted);
     margin-top: 4px;
   }
- 
+
   .sync-status {
     display: inline-flex;
     align-items: center;
@@ -64,54 +64,54 @@
     background: var(--surface2);
     color: var(--muted);
   }
- 
+
   .sync-dot {
     width: 7px; height: 7px;
     border-radius: 50%;
     background: var(--muted);
     transition: background 0.3s;
   }
- 
+
   .sync-status.synced .sync-dot { background: var(--green); }
   .sync-status.synced { color: var(--green); }
   .sync-status.saving .sync-dot { background: var(--yellow); }
   .sync-status.saving { color: var(--yellow); }
   .sync-status.error .sync-dot { background: var(--red); }
   .sync-status.error { color: var(--red); }
- 
+
   .container {
     max-width: 540px;
     margin: 0 auto;
     padding: 16px 14px 60px;
   }
- 
+
   .day-bar {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 20px;
   }
- 
+
   .day-btn {
     flex: 1;
-    padding: 10px 4px;
+    padding: 10px 2px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
     color: var(--muted);
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s;
     text-align: center;
   }
- 
+
   .day-btn:hover { background: var(--surface2); color: var(--text); }
   .day-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
   .dot { display: none; width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin: 3px auto 0; }
   .day-btn.has-data .dot { display: block; }
   .day-btn.active .dot { background: rgba(255,255,255,0.7); }
- 
+
   .section-header {
     font-size: 11px;
     font-weight: 700;
@@ -121,27 +121,25 @@
     margin: 18px 0 8px;
     border-bottom: 1px solid var(--border);
   }
- 
+
   .section-header.weekly { color: var(--blue); }
-  .section-header.monthly { color: var(--orange); }
   .section-header.totals-weekly { color: var(--blue); }
   .section-header.totals-monthly { color: var(--orange); }
   .section-header.totals-yearly { color: var(--yellow); }
   .section-header.summary { color: var(--orange); }
- 
+
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
   .field-grid.full { grid-template-columns: 1fr; }
- 
+
   .field-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
   }
- 
+
   .field-card:focus-within { border-color: var(--blue); }
-  .field-card.monthly-card:focus-within { border-color: var(--orange); }
- 
+
   .field-label {
     font-size: 11px;
     font-weight: 600;
@@ -150,16 +148,16 @@
     text-transform: uppercase;
     margin-bottom: 6px;
   }
- 
+
   .input-row { display: flex; align-items: baseline; gap: 2px; }
- 
+
   .dollar {
     font-size: 18px;
     font-weight: 700;
     color: var(--orange);
     line-height: 1;
   }
- 
+
   .field-input {
     background: transparent;
     border: none;
@@ -172,13 +170,13 @@
     -moz-appearance: textfield;
     line-height: 1;
   }
- 
+
   .field-input::-webkit-outer-spin-button,
   .field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .field-input::placeholder { color: var(--surface2); }
- 
+
   .btn-row { display: flex; gap: 10px; margin-top: 14px; }
- 
+
   .btn {
     flex: 1;
     padding: 13px;
@@ -190,11 +188,11 @@
     cursor: pointer;
     transition: opacity 0.15s;
   }
- 
+
   .btn:hover { opacity: 0.85; }
   .btn-save { background: var(--blue); color: #fff; }
   .btn-clear { background: var(--surface2); color: var(--text); }
- 
+
   .saved-flash {
     text-align: center;
     font-size: 13px;
@@ -206,20 +204,20 @@
     transition: opacity 0.3s;
   }
   .saved-flash.show { opacity: 1; }
- 
+
   .totals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
- 
+
   .total-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
   }
- 
+
   .total-card.full { grid-column: span 2; }
   .total-card.editable { border-style: dashed; }
   .total-card.editable:focus-within { border-color: var(--yellow); border-style: solid; }
- 
+
   .total-label {
     font-size: 11px;
     font-weight: 600;
@@ -231,7 +229,7 @@
     align-items: center;
     justify-content: space-between;
   }
- 
+
   .editable-tag {
     font-size: 9px;
     font-weight: 600;
@@ -242,7 +240,7 @@
     border-radius: 4px;
     text-transform: uppercase;
   }
- 
+
   .total-value {
     font-family: 'Inter', sans-serif;
     font-size: 28px;
@@ -250,11 +248,9 @@
     color: var(--text);
     line-height: 1;
   }
- 
+
   .total-value.weekly { color: var(--blue); }
-  .total-value.monthly { color: var(--orange); }
-  .total-value.yearly { color: var(--yellow); }
- 
+
   .total-input {
     background: transparent;
     border: none;
@@ -262,17 +258,19 @@
     font-family: 'Inter', sans-serif;
     font-size: 28px;
     font-weight: 700;
-    color: var(--yellow);
     width: 100%;
     -moz-appearance: textfield;
     line-height: 1;
   }
- 
+
+  .total-input.mtd { color: var(--orange); }
+  .total-input.ytd { color: var(--yellow); }
+
   .total-input::-webkit-outer-spin-button,
   .total-input::-webkit-inner-spin-button { -webkit-appearance: none; }
- 
+
   .reset-row { display: flex; gap: 8px; margin-top: 10px; }
- 
+
   .reset-btn {
     flex: 1;
     padding: 10px;
@@ -286,11 +284,11 @@
     cursor: pointer;
     transition: all 0.15s;
   }
- 
+
   .reset-btn:hover { color: var(--red); border-color: var(--red); }
- 
+
   .divider { height: 1px; background: var(--border); margin: 24px 0; }
- 
+
   .summary-block {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -302,7 +300,7 @@
     color: var(--subtext);
     white-space: pre-wrap;
   }
- 
+
   @media (max-width: 380px) {
     .field-grid { grid-template-columns: 1fr; }
     .totals-grid { grid-template-columns: 1fr; }
@@ -311,7 +309,7 @@
 </style>
 </head>
 <body>
- 
+
 <header>
   <h1>KPI TRACKER</h1>
   <div class="subtitle">Dave H</div>
@@ -320,9 +318,9 @@
     <span id="syncText">Connecting...</span>
   </div>
 </header>
- 
+
 <div class="container">
- 
+
   <div class="section-header weekly" style="margin-top:8px;">Select Day</div>
   <div class="day-bar">
     <button class="day-btn" data-day="0">MON<span class="dot"></span></button>
@@ -330,15 +328,16 @@
     <button class="day-btn" data-day="2">WED<span class="dot"></span></button>
     <button class="day-btn" data-day="3">THU<span class="dot"></span></button>
     <button class="day-btn" data-day="4">FRI<span class="dot"></span></button>
+    <button class="day-btn" data-day="5">SAT<span class="dot"></span></button>
   </div>
- 
-  <div class="section-header weekly">Weekly Fields</div>
+
+  <div class="section-header weekly">Daily Entry</div>
   <div class="field-grid full">
     <div class="field-card">
       <div class="field-label">Net Premium</div>
       <div class="input-row">
         <span class="dollar">$</span>
-        <input class="field-input" type="number" id="netPremiumWeekly" placeholder="0" min="0">
+        <input class="field-input" type="number" id="netPremium" placeholder="0" min="0">
       </div>
     </div>
   </div>
@@ -362,43 +361,26 @@
         <input class="field-input" type="number" id="annuities" placeholder="0" min="0">
       </div>
     </div>
-  </div>
- 
-  <div class="section-header monthly">Month-to-Date Fields</div>
-  <div class="field-grid full">
-    <div class="field-card monthly-card">
-      <div class="field-label">Net Premium MTD</div>
-      <div class="input-row">
-        <span class="dollar">$</span>
-        <input class="field-input" type="number" id="netPremium" placeholder="0" min="0">
-      </div>
-    </div>
-  </div>
-  <div class="field-grid">
-    <div class="field-card monthly-card">
-      <div class="field-label">E-Members MTD</div>
+    <div class="field-card">
+      <div class="field-label">E-Members</div>
       <input class="field-input" type="number" id="eMembers" placeholder="0" min="0">
     </div>
-    <div class="field-card monthly-card">
-      <div class="field-label">Applications MTD</div>
-      <input class="field-input" type="number" id="applicationsMTD" placeholder="0" min="0">
-    </div>
   </div>
- 
+
   <div class="btn-row">
     <button class="btn btn-save" onclick="saveDay()">Save Day</button>
     <button class="btn btn-clear" onclick="clearDay()">Clear</button>
   </div>
   <div class="saved-flash" id="savedFlash">✓ Saved</div>
- 
+
   <div class="divider"></div>
- 
+
   <!-- WEEKLY TOTALS -->
   <div class="section-header totals-weekly">Week Totals</div>
   <div class="totals-grid">
     <div class="total-card full">
       <div class="total-label">Net Premium (Week)</div>
-      <div class="total-value weekly" id="t-netPremiumWeekly">$0</div>
+      <div class="total-value weekly" id="t-netPremium">$0</div>
     </div>
     <div class="total-card">
       <div class="total-label">Applications</div>
@@ -416,11 +398,15 @@
       <div class="total-label">Annuities</div>
       <div class="total-value weekly" id="t-annuities">$0</div>
     </div>
+    <div class="total-card full">
+      <div class="total-label">E-Members (Week)</div>
+      <div class="total-value weekly" id="t-eMembers">0</div>
+    </div>
   </div>
   <div class="reset-row">
     <button class="reset-btn" onclick="resetWeekly()">↺ Reset Week</button>
   </div>
- 
+
   <!-- MONTHLY TOTALS -->
   <div class="section-header totals-monthly" style="margin-top:20px;">Month Totals (MTD)</div>
   <div class="totals-grid">
@@ -428,22 +414,22 @@
       <div class="total-label">Net Premium MTD <span class="editable-tag">editable</span></div>
       <div class="input-row">
         <span class="dollar" style="font-size:20px;">$</span>
-        <input class="total-input" style="color:var(--orange);" type="number" id="t-netPremium" placeholder="0" min="0" onchange="saveMTDOverride()">
+        <input class="total-input mtd" type="number" id="mtd-netPremium" placeholder="0" min="0" onchange="saveMTD()">
       </div>
     </div>
     <div class="total-card full editable">
-      <div class="total-label">E-Members MTD <span class="editable-tag">editable</span></div>
-      <input class="total-input" style="color:var(--orange);" type="number" id="t-eMembers" placeholder="0" min="0" onchange="saveMTDOverride()">
+      <div class="total-label">Applications MTD <span class="editable-tag">editable</span></div>
+      <input class="total-input mtd" type="number" id="mtd-applications" placeholder="0" min="0" onchange="saveMTD()">
     </div>
     <div class="total-card full editable">
-      <div class="total-label">Applications MTD <span class="editable-tag">editable</span></div>
-      <input class="total-input" style="color:var(--orange);" type="number" id="t-applicationsMTD" placeholder="0" min="0" onchange="saveMTDOverride()">
+      <div class="total-label">E-Members MTD <span class="editable-tag">editable</span></div>
+      <input class="total-input mtd" type="number" id="mtd-eMembers" placeholder="0" min="0" onchange="saveMTD()">
     </div>
   </div>
   <div class="reset-row">
     <button class="reset-btn" onclick="resetMonthly()">↺ Reset Month</button>
   </div>
- 
+
   <!-- YEARLY TOTALS -->
   <div class="section-header totals-yearly" style="margin-top:20px;">Year Totals (YTD)</div>
   <div class="totals-grid">
@@ -451,81 +437,72 @@
       <div class="total-label">Net Premium YTD <span class="editable-tag">editable</span></div>
       <div class="input-row">
         <span class="dollar" style="color:var(--yellow);font-size:20px;">$</span>
-        <input class="total-input" type="number" id="t-netPremiumYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
+        <input class="total-input ytd" type="number" id="ytd-netPremium" placeholder="0" min="0" onchange="saveYTD()">
       </div>
     </div>
     <div class="total-card full editable">
-      <div class="total-label">E-Members YTD <span class="editable-tag">editable</span></div>
-      <input class="total-input" type="number" id="t-eMembersYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
+      <div class="total-label">Applications YTD <span class="editable-tag">editable</span></div>
+      <input class="total-input ytd" type="number" id="ytd-applications" placeholder="0" min="0" onchange="saveYTD()">
     </div>
     <div class="total-card full editable">
-      <div class="total-label">Applications YTD <span class="editable-tag">editable</span></div>
-      <input class="total-input" type="number" id="t-applicationsYTD" placeholder="0" min="0" onchange="saveYTDOverride()">
+      <div class="total-label">E-Members YTD <span class="editable-tag">editable</span></div>
+      <input class="total-input ytd" type="number" id="ytd-eMembers" placeholder="0" min="0" onchange="saveYTD()">
     </div>
   </div>
   <div class="reset-row">
     <button class="reset-btn" onclick="resetYearly()">↺ Reset Year</button>
   </div>
- 
+
   <!-- FRIDAY SUMMARY -->
   <div class="section-header summary" style="margin-top:20px;">Friday Summary</div>
-  <div class="summary-block" id="summaryBlock">Save your numbers above to see your Friday summary.</div>
- 
+  <div class="summary-block" id="summaryBlock">Loading...</div>
+
 </div>
- 
+
 <script>
   const SUPABASE_URL = 'https://dmlvwnxrknllveywzdas.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbHZ3bnhya25sbHZleXd6ZGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMTIxOTgsImV4cCI6MjA4ODY4ODE5OH0.QAVDrFxBU80IpAhwA-i7Kag9cEfVR4fERYZssrptsNs';
   const API = `${SUPABASE_URL}/rest/v1/kpi_data`;
- 
+
   const HEADERS = {
     'apikey': SUPABASE_KEY,
     'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-    'Prefer': 'resolution=merge-duplicates'
+    'Content-Type': 'application/json'
   };
- 
-  const WEEKLY_FIELDS  = ['netPremiumWeekly','applications','callsMade','appointments','annuities'];
-  const MONTHLY_FIELDS = ['netPremium','eMembers','applicationsMTD'];
-  const YTD_FIELDS     = ['netPremiumYTD','eMembersYTD','applicationsYTD'];
-  const MTD_OVERRIDE_FIELDS = ['mtd_netPremium_override','mtd_eMembers_override','mtd_applicationsMTD_override'];
- 
+
+  const DAILY_FIELDS = ['netPremium','applications','callsMade','appointments','annuities','eMembers'];
+  const ACCUM_FIELDS = ['netPremium','applications','eMembers']; // fields that roll up to MTD and YTD
+  const NUM_DAYS = 6; // Mon–Sat
+
   let currentDay = 0;
-  let weeklyData  = Array(5).fill(null).map(() => ({}));
-  let mtdOverrides = { netPremium: null, eMembers: null, applicationsMTD: null };
-  let monthlyData = Array(5).fill(null).map(() => ({}));
-  let ytdData     = { netPremiumYTD: 0, eMembersYTD: 0, applicationsYTD: 0 };
- 
+  let dayData = Array(NUM_DAYS).fill(null).map(() => ({}));
+  let mtd = { netPremium: 0, applications: 0, eMembers: 0 };
+  let ytd = { netPremium: 0, applications: 0, eMembers: 0 };
+
   function setSyncStatus(state, text) {
     const el = document.getElementById('syncStatus');
     el.className = 'sync-status ' + state;
     document.getElementById('syncText').textContent = text;
   }
- 
-  async function dbGet(key) {
-    try {
-      const res = await fetch(`${API}?field_key=eq.${key}&select=field_value`, { headers: HEADERS });
-      const rows = await res.json();
-      return rows.length ? rows[0].field_value : null;
-    } catch(e) { return null; }
-  }
- 
+
   async function dbSet(key, value) {
     try {
+      // Delete existing then insert (simple upsert)
+      await fetch(`${API}?field_key=eq.${key}`, { method: 'DELETE', headers: HEADERS });
       await fetch(API, {
         method: 'POST',
-        headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+        headers: HEADERS,
         body: JSON.stringify({ field_key: key, field_value: value })
       });
     } catch(e) { console.error('dbSet error', e); }
   }
- 
+
   async function dbDelete(key) {
     try {
       await fetch(`${API}?field_key=eq.${key}`, { method: 'DELETE', headers: HEADERS });
     } catch(e) {}
   }
- 
+
   async function loadAll() {
     setSyncStatus('saving', 'Loading...');
     try {
@@ -533,246 +510,249 @@
       const rows = await res.json();
       const map = {};
       rows.forEach(r => map[r.field_key] = r.field_value);
- 
-      // Load weekly data
-      for (let d = 0; d < 5; d++) {
-        weeklyData[d] = {};
-        WEEKLY_FIELDS.forEach(f => {
-          const val = map[`w_${d}_${f}`];
-          if (val !== undefined) weeklyData[d][f] = val;
+
+      // Daily data (new schema: d_{day}_{field})
+      for (let d = 0; d < NUM_DAYS; d++) {
+        dayData[d] = {};
+        DAILY_FIELDS.forEach(f => {
+          const val = map[`d_${d}_${f}`];
+          if (val !== undefined && val !== null) dayData[d][f] = val;
         });
       }
- 
-      // Load monthly data
-      for (let d = 0; d < 5; d++) {
-        monthlyData[d] = {};
-        MONTHLY_FIELDS.forEach(f => {
-          const val = map[`m_${d}_${f}`];
-          if (val !== undefined) monthlyData[d][f] = val;
-        });
+
+      // MTD accumulators (with migration from old schema)
+      mtd.netPremium   = firstDefined(map['mtd_netPremium'],   map['mtd_netPremium_override'],      sumLegacyMonthly(map, 'netPremium'));
+      mtd.applications = firstDefined(map['mtd_applications'], map['mtd_applicationsMTD_override'], sumLegacyMonthly(map, 'applicationsMTD'));
+      mtd.eMembers     = firstDefined(map['mtd_eMembers'],     map['mtd_eMembers_override'],        sumLegacyMonthly(map, 'eMembers'));
+
+      // YTD accumulators (with migration from old schema)
+      ytd.netPremium   = firstDefined(map['ytd_netPremium'],   map['netPremiumYTD'],   0);
+      ytd.applications = firstDefined(map['ytd_applications'], map['applicationsYTD'], 0);
+      ytd.eMembers     = firstDefined(map['ytd_eMembers'],     map['eMembersYTD'],     0);
+
+      // Migrate legacy weekly daily entries (w_{d}_{f}) into new daily schema if new is empty
+      let hasNewDaily = rows.some(r => r.field_key.startsWith('d_'));
+      if (!hasNewDaily) {
+        for (let d = 0; d < 5; d++) {
+          ['netPremiumWeekly','applications','callsMade','appointments','annuities'].forEach(oldF => {
+            const val = map[`w_${d}_${oldF}`];
+            if (val !== undefined && val !== null && val > 0) {
+              const newF = oldF === 'netPremiumWeekly' ? 'netPremium' : oldF;
+              dayData[d][newF] = val;
+            }
+          });
+          const em = map[`m_${d}_eMembers`];
+          if (em !== undefined && em !== null && em > 0) dayData[d].eMembers = em;
+        }
       }
- 
-      // Load YTD
-      YTD_FIELDS.forEach(f => {
-        if (map[f] !== undefined) ytdData[f] = map[f];
-      });
- 
-      // Load MTD overrides
-      if (map['mtd_netPremium_override'] !== undefined) mtdOverrides.netPremium = map['mtd_netPremium_override'];
-      if (map['mtd_eMembers_override'] !== undefined) mtdOverrides.eMembers = map['mtd_eMembers_override'];
-      if (map['mtd_applicationsMTD_override'] !== undefined) mtdOverrides.applicationsMTD = map['mtd_applicationsMTD_override'];
- 
+
       setSyncStatus('synced', 'Synced');
     } catch(e) {
-      setSyncStatus('error', 'Offline — using local data');
+      setSyncStatus('error', 'Offline');
     }
- 
+
     renderDayBar();
     loadDayIntoForm();
     updateTotals();
   }
- 
+
+  function firstDefined(...vals) {
+    for (const v of vals) { if (v !== undefined && v !== null) return v; }
+    return 0;
+  }
+
+  function sumLegacyMonthly(map, field) {
+    let sum = 0, found = false;
+    for (let d = 0; d < 5; d++) {
+      const v = map[`m_${d}_${field}`];
+      if (v !== undefined && v !== null) { sum += v; found = true; }
+    }
+    return found ? sum : undefined;
+  }
+
   async function saveDay() {
     setSyncStatus('saving', 'Saving...');
- 
-    const wd = {};
-    WEEKLY_FIELDS.forEach(f => { wd[f] = parseFloat(document.getElementById(f).value) || 0; });
-    const md = {};
-    MONTHLY_FIELDS.forEach(f => { md[f] = parseFloat(document.getElementById(f).value) || 0; });
- 
-    // YTD deltas
-    const prevNP   = (monthlyData[currentDay] || {}).netPremium  || 0;
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers    || 0;
-    const prevApps = (weeklyData[currentDay]  || {}).applications || 0;
-    ytdData.netPremiumYTD   = Math.max(0, (ytdData.netPremiumYTD   || 0) + (md.netPremium   - prevNP));
-    ytdData.eMembersYTD     = Math.max(0, (ytdData.eMembersYTD     || 0) + (md.eMembers     - prevEMem));
-    ytdData.applicationsYTD = Math.max(0, (ytdData.applicationsYTD || 0) + (wd.applications - prevApps));
- 
-    weeklyData[currentDay]  = wd;
-    monthlyData[currentDay] = md;
- 
-    // Write to Supabase
+
+    const newVals = {};
+    DAILY_FIELDS.forEach(f => { newVals[f] = parseFloat(document.getElementById(f).value) || 0; });
+
+    // Deltas roll up to MTD and YTD
+    ACCUM_FIELDS.forEach(f => {
+      const prev = (dayData[currentDay] || {})[f] || 0;
+      const delta = newVals[f] - prev;
+      mtd[f] = Math.max(0, (mtd[f] || 0) + delta);
+      ytd[f] = Math.max(0, (ytd[f] || 0) + delta);
+    });
+
+    dayData[currentDay] = newVals;
+
     const writes = [];
-    WEEKLY_FIELDS.forEach(f  => writes.push(dbSet(`w_${currentDay}_${f}`, wd[f])));
-    MONTHLY_FIELDS.forEach(f => writes.push(dbSet(`m_${currentDay}_${f}`, md[f])));
-    YTD_FIELDS.forEach(f     => writes.push(dbSet(f, ytdData[f])));
+    DAILY_FIELDS.forEach(f => writes.push(dbSet(`d_${currentDay}_${f}`, newVals[f])));
+    ACCUM_FIELDS.forEach(f => {
+      writes.push(dbSet(`mtd_${f}`, mtd[f]));
+      writes.push(dbSet(`ytd_${f}`, ytd[f]));
+    });
     await Promise.all(writes);
- 
+
     setSyncStatus('synced', 'Saved ✓');
     renderDayBar();
     updateTotals();
     flashSaved();
   }
- 
+
   async function clearDay() {
     setSyncStatus('saving', 'Saving...');
- 
-    const prevNP   = (monthlyData[currentDay] || {}).netPremium  || 0;
-    const prevEMem = (monthlyData[currentDay] || {}).eMembers    || 0;
-    const prevApps = (weeklyData[currentDay]  || {}).applications || 0;
-    ytdData.netPremiumYTD   = Math.max(0, (ytdData.netPremiumYTD   || 0) - prevNP);
-    ytdData.eMembersYTD     = Math.max(0, (ytdData.eMembersYTD     || 0) - prevEMem);
-    ytdData.applicationsYTD = Math.max(0, (ytdData.applicationsYTD || 0) - prevApps);
- 
-    weeklyData[currentDay]  = {};
-    monthlyData[currentDay] = {};
- 
-    const deletes = [];
-    WEEKLY_FIELDS.forEach(f  => deletes.push(dbDelete(`w_${currentDay}_${f}`)));
-    MONTHLY_FIELDS.forEach(f => deletes.push(dbDelete(`m_${currentDay}_${f}`)));
-    YTD_FIELDS.forEach(f     => deletes.push(dbSet(f, ytdData[f])));
-    await Promise.all(deletes);
- 
-    [...WEEKLY_FIELDS, ...MONTHLY_FIELDS].forEach(f => { const el = document.getElementById(f); if(el) el.value = ''; });
+
+    // Back the cleared day's values out of MTD and YTD
+    ACCUM_FIELDS.forEach(f => {
+      const prev = (dayData[currentDay] || {})[f] || 0;
+      mtd[f] = Math.max(0, (mtd[f] || 0) - prev);
+      ytd[f] = Math.max(0, (ytd[f] || 0) - prev);
+    });
+
+    dayData[currentDay] = {};
+
+    const writes = [];
+    DAILY_FIELDS.forEach(f => writes.push(dbDelete(`d_${currentDay}_${f}`)));
+    ACCUM_FIELDS.forEach(f => {
+      writes.push(dbSet(`mtd_${f}`, mtd[f]));
+      writes.push(dbSet(`ytd_${f}`, ytd[f]));
+    });
+    await Promise.all(writes);
+
+    DAILY_FIELDS.forEach(f => { const el = document.getElementById(f); if(el) el.value = ''; });
     setSyncStatus('synced', 'Saved ✓');
     renderDayBar();
     updateTotals();
   }
- 
-  async function saveMTDOverride() {
-    const npVal = parseFloat(document.getElementById('t-netPremium').value);
-    const emVal = parseFloat(document.getElementById('t-eMembers').value);
-    const apVal = parseFloat(document.getElementById('t-applicationsMTD').value);
-    if (!isNaN(npVal)) mtdOverrides.netPremium = npVal;
-    if (!isNaN(emVal)) mtdOverrides.eMembers = emVal;
-    if (!isNaN(apVal)) mtdOverrides.applicationsMTD = apVal;
+
+  async function saveMTD() {
+    const np = parseFloat(document.getElementById('mtd-netPremium').value);
+    const ap = parseFloat(document.getElementById('mtd-applications').value);
+    const em = parseFloat(document.getElementById('mtd-eMembers').value);
+    if (!isNaN(np)) mtd.netPremium   = np;
+    if (!isNaN(ap)) mtd.applications = ap;
+    if (!isNaN(em)) mtd.eMembers     = em;
+
     setSyncStatus('saving', 'Saving...');
-    await Promise.all([
-      dbSet('mtd_netPremium_override', mtdOverrides.netPremium),
-      dbSet('mtd_eMembers_override', mtdOverrides.eMembers),
-      dbSet('mtd_applicationsMTD_override', mtdOverrides.applicationsMTD)
-    ]);
+    await Promise.all(ACCUM_FIELDS.map(f => dbSet(`mtd_${f}`, mtd[f])));
     setSyncStatus('synced', 'Saved ✓');
+    updateTotals();
   }
- 
-  async function saveYTDOverride() {
-    const npVal = parseFloat(document.getElementById('t-netPremiumYTD').value);
-    const emVal = parseFloat(document.getElementById('t-eMembersYTD').value);
-    const apVal = parseFloat(document.getElementById('t-applicationsYTD').value);
-    if (!isNaN(npVal)) ytdData.netPremiumYTD   = npVal;
-    if (!isNaN(emVal)) ytdData.eMembersYTD     = emVal;
-    if (!isNaN(apVal)) ytdData.applicationsYTD = apVal;
- 
+
+  async function saveYTD() {
+    const np = parseFloat(document.getElementById('ytd-netPremium').value);
+    const ap = parseFloat(document.getElementById('ytd-applications').value);
+    const em = parseFloat(document.getElementById('ytd-eMembers').value);
+    if (!isNaN(np)) ytd.netPremium   = np;
+    if (!isNaN(ap)) ytd.applications = ap;
+    if (!isNaN(em)) ytd.eMembers     = em;
+
     setSyncStatus('saving', 'Saving...');
-    await Promise.all(YTD_FIELDS.map(f => dbSet(f, ytdData[f])));
+    await Promise.all(ACCUM_FIELDS.map(f => dbSet(`ytd_${f}`, ytd[f])));
     setSyncStatus('synced', 'Saved ✓');
+    updateTotals();
   }
- 
+
   async function resetWeekly() {
-    if (!confirm('Reset all weekly totals?\n(Net Premium Weekly, Applications, Calls Made, Appointments, Annuities)\n\nMTD and YTD will NOT be affected.')) return;
+    if (!confirm('Reset the week?\n\nThis clears all daily entries (Mon–Sat).\nMTD and YTD totals will NOT be affected.')) return;
     setSyncStatus('saving', 'Saving...');
     const deletes = [];
-    for (let d = 0; d < 5; d++) {
-      WEEKLY_FIELDS.forEach(f => deletes.push(dbDelete(`w_${d}_${f}`)));
+    for (let d = 0; d < NUM_DAYS; d++) {
+      DAILY_FIELDS.forEach(f => deletes.push(dbDelete(`d_${d}_${f}`)));
     }
     await Promise.all(deletes);
-    weeklyData = Array(5).fill(null).map(() => ({}));
+    dayData = Array(NUM_DAYS).fill(null).map(() => ({}));
     setSyncStatus('synced', 'Saved ✓');
     loadDayIntoForm();
     renderDayBar();
     updateTotals();
   }
- 
+
   async function resetMonthly() {
-    if (!confirm('Reset MTD totals?\n(Net Premium MTD and E-Members MTD)\n\nWeekly and YTD will NOT be affected.')) return;
+    if (!confirm('Reset MTD totals to zero?\n(Net Premium, Applications, E-Members)\n\nWeekly and YTD totals will NOT be affected.')) return;
+    mtd = { netPremium: 0, applications: 0, eMembers: 0 };
     setSyncStatus('saving', 'Saving...');
-    const deletes = [];
-    for (let d = 0; d < 5; d++) {
-      MONTHLY_FIELDS.forEach(f => deletes.push(dbDelete(`m_${d}_${f}`)));
-    }
-    await Promise.all(deletes);
-    monthlyData = Array(5).fill(null).map(() => ({}));
-    mtdOverrides = { netPremium: null, eMembers: null, applicationsMTD: null };
-    await Promise.all([
-      dbSet('mtd_netPremium_override', null),
-      dbSet('mtd_eMembers_override', null),
-      dbSet('mtd_applicationsMTD_override', null)
-    ]);
+    await Promise.all(ACCUM_FIELDS.map(f => dbSet(`mtd_${f}`, 0)));
     setSyncStatus('synced', 'Saved ✓');
-    loadDayIntoForm();
-    renderDayBar();
     updateTotals();
   }
- 
+
   async function resetYearly() {
-    if (!confirm('Reset YTD totals to zero?\n(Net Premium YTD, E-Members YTD, Applications YTD)\n\nWeekly and MTD will NOT be affected.')) return;
-    ytdData = { netPremiumYTD: 0, eMembersYTD: 0, applicationsYTD: 0 };
+    if (!confirm('Reset YTD totals to zero?\n(Net Premium, Applications, E-Members)\n\nWeekly and MTD totals will NOT be affected.')) return;
+    ytd = { netPremium: 0, applications: 0, eMembers: 0 };
     setSyncStatus('saving', 'Saving...');
-    await Promise.all(YTD_FIELDS.map(f => dbSet(f, 0)));
+    await Promise.all(ACCUM_FIELDS.map(f => dbSet(`ytd_${f}`, 0)));
     setSyncStatus('synced', 'Saved ✓');
     updateTotals();
   }
- 
+
   function renderDayBar() {
     document.querySelectorAll('.day-btn').forEach((btn, i) => {
       btn.classList.toggle('active', i === currentDay);
-      const wd = weeklyData[i] || {};
-      const md = monthlyData[i] || {};
-      const hasAny = [...WEEKLY_FIELDS, ...MONTHLY_FIELDS].some(f => (wd[f] || md[f] || 0) > 0);
+      const d = dayData[i] || {};
+      const hasAny = DAILY_FIELDS.some(f => (d[f] || 0) > 0);
       btn.classList.toggle('has-data', hasAny);
       btn.onclick = () => { currentDay = i; renderDayBar(); loadDayIntoForm(); };
     });
   }
- 
+
   function loadDayIntoForm() {
-    const wd = weeklyData[currentDay]  || {};
-    const md = monthlyData[currentDay] || {};
-    WEEKLY_FIELDS.forEach(f  => { const el = document.getElementById(f); if(el) el.value = wd[f] || ''; });
-    MONTHLY_FIELDS.forEach(f => { const el = document.getElementById(f); if(el) el.value = md[f] || ''; });
+    const d = dayData[currentDay] || {};
+    DAILY_FIELDS.forEach(f => { const el = document.getElementById(f); if(el) el.value = d[f] || ''; });
   }
- 
+
   function updateTotals() {
-    const wT = {}; WEEKLY_FIELDS.forEach(f  => wT[f] = 0);
-    const mT = {}; MONTHLY_FIELDS.forEach(f => mT[f] = 0);
- 
-    weeklyData.forEach(d  => { if(!d) return; WEEKLY_FIELDS.forEach(f  => wT[f] += (parseFloat(d[f]) || 0)); });
-    monthlyData.forEach(d => { if(!d) return; MONTHLY_FIELDS.forEach(f => mT[f] += (parseFloat(d[f]) || 0)); });
- 
-    document.getElementById('t-netPremiumWeekly').textContent = '$' + wT.netPremiumWeekly.toLocaleString();
-    document.getElementById('t-applications').textContent     = wT.applications;
-    document.getElementById('t-callsMade').textContent        = wT.callsMade;
-    document.getElementById('t-appointments').textContent     = wT.appointments;
-    document.getElementById('t-annuities').textContent        = '$' + wT.annuities.toLocaleString();
-    const npMTD = document.getElementById('t-netPremium');
-    const emMTD = document.getElementById('t-eMembers');
-    const apMTD = document.getElementById('t-applicationsMTD');
-    if (document.activeElement !== npMTD) npMTD.value = mtdOverrides.netPremium !== null ? mtdOverrides.netPremium : mT.netPremium;
-    if (document.activeElement !== emMTD) emMTD.value = mtdOverrides.eMembers !== null ? mtdOverrides.eMembers : mT.eMembers;
-    if (document.activeElement !== apMTD) apMTD.value = mtdOverrides.applicationsMTD !== null ? mtdOverrides.applicationsMTD : mT.applicationsMTD;
- 
-    const npYTD = document.getElementById('t-netPremiumYTD');
-    const emYTD = document.getElementById('t-eMembersYTD');
-    const apYTD = document.getElementById('t-applicationsYTD');
-    if (document.activeElement !== npYTD) npYTD.value = ytdData.netPremiumYTD   || 0;
-    if (document.activeElement !== emYTD) emYTD.value = ytdData.eMembersYTD     || 0;
-    if (document.activeElement !== apYTD) apYTD.value = ytdData.applicationsYTD || 0;
- 
+    const wk = {};
+    DAILY_FIELDS.forEach(f => wk[f] = 0);
+    dayData.forEach(d => { if(!d) return; DAILY_FIELDS.forEach(f => wk[f] += (parseFloat(d[f]) || 0)); });
+
+    document.getElementById('t-netPremium').textContent   = '$' + wk.netPremium.toLocaleString();
+    document.getElementById('t-applications').textContent = wk.applications;
+    document.getElementById('t-callsMade').textContent    = wk.callsMade;
+    document.getElementById('t-appointments').textContent = wk.appointments;
+    document.getElementById('t-annuities').textContent    = '$' + wk.annuities.toLocaleString();
+    document.getElementById('t-eMembers').textContent     = wk.eMembers;
+
+    const setIfNotFocused = (id, val) => {
+      const el = document.getElementById(id);
+      if (document.activeElement !== el) el.value = val;
+    };
+
+    setIfNotFocused('mtd-netPremium',   mtd.netPremium   || 0);
+    setIfNotFocused('mtd-applications', mtd.applications || 0);
+    setIfNotFocused('mtd-eMembers',     mtd.eMembers     || 0);
+    setIfNotFocused('ytd-netPremium',   ytd.netPremium   || 0);
+    setIfNotFocused('ytd-applications', ytd.applications || 0);
+    setIfNotFocused('ytd-eMembers',     ytd.eMembers     || 0);
+
     document.getElementById('summaryBlock').textContent =
-`Net Premium (Week):  $${wT.netPremiumWeekly.toLocaleString()}
-Applications:         ${wT.applications}
-Calls Made:           ${wT.callsMade}
-Appointments:         ${wT.appointments}
-Annuities:           $${wT.annuities.toLocaleString()}
-Net Premium MTD:     $${(mtdOverrides.netPremium !== null ? mtdOverrides.netPremium : mT.netPremium).toLocaleString()}
-E-Members MTD:        ${mtdOverrides.eMembers !== null ? mtdOverrides.eMembers : mT.eMembers}
-Applications MTD:     ${mtdOverrides.applicationsMTD !== null ? mtdOverrides.applicationsMTD : mT.applicationsMTD}
-Net Premium YTD:     $${(ytdData.netPremiumYTD||0).toLocaleString()}
-E-Members YTD:        ${ytdData.eMembersYTD||0}
-Applications YTD:     ${ytdData.applicationsYTD||0}`;
+`Net Premium (Week):  $${wk.netPremium.toLocaleString()}
+Applications:         ${wk.applications}
+Calls Made:           ${wk.callsMade}
+Appointments:         ${wk.appointments}
+Annuities:           $${wk.annuities.toLocaleString()}
+E-Members (Week):     ${wk.eMembers}
+Net Premium MTD:     $${(mtd.netPremium||0).toLocaleString()}
+Applications MTD:     ${mtd.applications||0}
+E-Members MTD:        ${mtd.eMembers||0}
+Net Premium YTD:     $${(ytd.netPremium||0).toLocaleString()}
+Applications YTD:     ${ytd.applications||0}
+E-Members YTD:        ${ytd.eMembers||0}`;
   }
- 
+
   function flashSaved() {
     const el = document.getElementById('savedFlash');
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 1500);
   }
- 
+
   function init() {
-    const dow = new Date().getDay();
-    currentDay = (dow >= 1 && dow <= 5) ? dow - 1 : 0;
+    const dow = new Date().getDay(); // 0=Sun, 1=Mon ... 6=Sat
+    currentDay = (dow >= 1 && dow <= 6) ? dow - 1 : 0;
     loadAll();
   }
- 
+
   init();
 </script>
 </body>
